@@ -5,3 +5,4 @@ authors = ["Blake"]
 
 [dependencies]
 quicli = "0.3"
+clap = "*"
