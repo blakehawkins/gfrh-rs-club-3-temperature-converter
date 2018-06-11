@@ -25,11 +25,20 @@ arg_enum! {
 #[structopt(name = "Temperature Converter", about = "L33t h4x")]
 struct Cli {
     /// The desired output units.
-    #[structopt(raw(possible_values = "&TemperatureUnit::variants()", case_insensitive = "true"), long = "to", short = "w")]
+    #[structopt(
+        raw(possible_values = "&TemperatureUnit::variants()", case_insensitive = "true"),
+        long = "to",
+        short = "w"
+    )]
     to: TemperatureUnit,
 
     /// The input units.
-    #[structopt(raw(possible_values = "&TemperatureUnit::variants()", case_insensitive = "true"), long = "from", short = "r", default_value = "Fahrenheit")]
+    #[structopt(
+        raw(possible_values = "&TemperatureUnit::variants()", case_insensitive = "true"),
+        long = "from",
+        short = "r",
+        default_value = "Fahrenheit"
+    )]
     from: TemperatureUnit,
 
     #[structopt(name = "VALUE")]
@@ -66,22 +75,22 @@ main!(|args: Cli, log_level: verbosity| {
     match (from, to) {
         (TemperatureUnit::Fahrenheit, TemperatureUnit::Celsius) => {
             finish((&args.value - 32.0) * 5.0 / 9.0);
-        },
+        }
         (TemperatureUnit::Fahrenheit, TemperatureUnit::Kelvin) => {
             finish((&args.value - 32.0) * 5.0 / 9.0 + 273.15);
-        },
+        }
         (TemperatureUnit::Celsius, TemperatureUnit::Fahrenheit) => {
             finish((&args.value * 9.0 / 5.0) + 32.0);
-        },
+        }
         (TemperatureUnit::Celsius, TemperatureUnit::Kelvin) => {
             finish(&args.value + 273.15);
-        },
+        }
         (TemperatureUnit::Kelvin, TemperatureUnit::Fahrenheit) => {
             finish(((&args.value - 273.15) - 32.0) * 9.0 / 5.0);
-        },
+        }
         (TemperatureUnit::Kelvin, TemperatureUnit::Celsius) => {
             finish(&args.value - 273.15);
-        },
+        }
         _ => finish(args.value),
     };
 });
