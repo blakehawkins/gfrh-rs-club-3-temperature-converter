@@ -1,12 +1,8 @@
-#[macro_use]
-extern crate quicli;
-
-#[macro_use]
-extern crate clap;
-
 use std::process;
 
-use quicli::prelude::*;
+use anyhow::Result;
+use clap::arg_enum;
+use structopt::StructOpt;
 
 arg_enum! {
     #[derive(Debug, Clone)]
@@ -26,7 +22,7 @@ arg_enum! {
 struct Cli {
     /// The desired output units.
     #[structopt(
-        raw(possible_values = "&TemperatureUnit::variants()", case_insensitive = "true"),
+        possible_values = &TemperatureUnit::variants(), case_insensitive = true,
         long = "to",
         short = "w"
     )]
@@ -34,7 +30,7 @@ struct Cli {
 
     /// The input units.
     #[structopt(
-        raw(possible_values = "&TemperatureUnit::variants()", case_insensitive = "true"),
+        possible_values = &TemperatureUnit::variants(), case_insensitive = true,
         long = "from",
         short = "r",
         default_value = "Fahrenheit"
@@ -43,9 +39,6 @@ struct Cli {
 
     #[structopt(name = "VALUE")]
     value: f64,
-
-    #[structopt(flatten)]
-    verbosity: Verbosity,
 }
 
 fn long_form(u: &TemperatureUnit) -> TemperatureUnit {
@@ -62,8 +55,9 @@ fn finish(v: f64) {
     process::exit(0);
 }
 
-main!(|args: Cli, log_level: verbosity| {
+fn main() -> Result<()> {
     // Select different input units if the output is using the input's default.
+    let args = Cli::from_args();
     let input = match &args.to {
         TemperatureUnit::Fahrenheit | TemperatureUnit::F => TemperatureUnit::Celsius,
         _ => args.from,
@@ -93,4 +87,5 @@ main!(|args: Cli, log_level: verbosity| {
         }
         _ => finish(args.value),
     };
-});
+    Ok(())
+}
