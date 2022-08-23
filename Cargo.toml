@@ -2,6 +2,7 @@
 name = "gfrh-rs-club-temperature-converter"
 version = "0.1.0"
 authors = ["Blake"]
+edition = "2021"
 
 [dependencies]
 quicli = "0.3"
