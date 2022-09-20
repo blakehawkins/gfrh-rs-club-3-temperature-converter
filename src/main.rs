@@ -2,7 +2,7 @@ use std::process;
 
 use anyhow::Result;
 use clap::arg_enum;
-use structopt::StructOpt;
+use clap::StructOpt;
 
 arg_enum! {
     #[derive(Debug, Clone)]
@@ -22,17 +22,17 @@ arg_enum! {
 struct Cli {
     /// The desired output units.
     #[structopt(
-        possible_values = &TemperatureUnit::variants(), case_insensitive = true,
+        possible_values = TemperatureUnit::variants(), case_insensitive = true,
         long = "to",
-        short = "w"
+        short = 'w'
     )]
     to: TemperatureUnit,
 
     /// The input units.
     #[structopt(
-        possible_values = &TemperatureUnit::variants(), case_insensitive = true,
+        possible_values = TemperatureUnit::variants(), case_insensitive = true,
         long = "from",
-        short = "r",
+        short = 'r',
         default_value = "Fahrenheit"
     )]
     from: TemperatureUnit,
